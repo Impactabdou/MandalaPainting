@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>MandalaMainWindow</class>
+
+    <widget class="QMainWindow" name="MainWindow">
+
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>950</width>
+                <height>750</height>
+            </rect>
+        </property>
+
+        <property name="windowTitle">
+            <string>Mandala Painting</string>
+        </property>
+
+        <widget class="QWidget" name="centralWidget">
+            <layout class="QVBoxLayout" name="mainLayout">
+                <property name="spacing">
+                    <number>10</number>
+                </property>
+
+                <item>
+                    <widget class="QFrame" name="topFrame">
+                        <property name="frameShape">
+                            <enum>QFrame::StyledPanel</enum>
+                        </property>
+                        <layout class="QHBoxLayout" name="topLayout">
+
+                            <item>
+                                <widget class="QLabel" name="labelSlices">
+                                    <property name="text">
+                                        <string>Slices</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QSlider" name="sliderSlices">
+                                    <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                    </property>
+                                    <property name="minimum">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maximum">
+                                        <number>32</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>9</number>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QSpinBox" name="spinSlices">
+                                    <property name="minimum">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maximum">
+                                        <number>32</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>9</number>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QCheckBox" name="checkMirror">
+                                    <property name="text">
+                                        <string>Mirror</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QComboBox" name="comboCanvasSize">
+                                    <item>
+                                        <property name="text">
+                                            <string>400x400</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>600x600</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>800x800</string>
+                                        </property>
+                                    </item>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QPushButton" name="btnClear">
+                                    <property name="text">
+                                        <string>Clear</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QCheckBox" name="checkGrid">
+                                    <property name="text">
+                                        <string>Grid</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QSlider" name="sliderGrid">
+                                    <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                    </property>
+                                    <property name="minimum">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maximum">
+                                        <number>50</number>
+                                    </property>
+                                </widget>
+                            </item>
+
+                        </layout>
+                    </widget>
+                </item>
+
+                <item>
+                    <widget class="QFrame" name="canvasFrame">
+                        <property name="frameShape">
+                            <enum>QFrame::StyledPanel</enum>
+                        </property>
+                        <layout class="QVBoxLayout" name="canvasLayout">
+                            <property name="spacing">
+                                <number>0</number>
+                            </property>
+                        </layout>
+                    </widget>
+                </item>
+
+                <item>
+                    <widget class="QFrame" name="bottomFrame">
+                        <property name="frameShape">
+                            <enum>QFrame::StyledPanel</enum>
+                        </property>
+                        <layout class="QHBoxLayout" name="bottomLayout">
+
+                            <item>
+                                <widget class="QLabel">
+                                    <property name="text">
+                                        <string>Line width</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QFrame" name="colorPreview">
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>QFrame::Box</enum>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QSlider" name="sliderLineWidth">
+                                    <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                    </property>
+                                    <property name="minimum">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maximum">
+                                        <number>40</number>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QPushButton" name="btnColor">
+                                    <property name="text">
+                                        <string>Color</string>
+                                    </property>
+                                </widget>
+                            </item>
+
+                            <item>
+                                <widget class="QPushButton" name="btnPalette">
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>30</width>
+                                            <height>30</height>
+                                        </size>
+                                    </property>
+                                </widget>
+                            </item>
+
+                        </layout>
+                    </widget>
+                </item>
+
+            </layout>
+        </widget>
+
+        <widget class="QStatusBar" name="statusBar"/>
+
+    </widget>
+
+    <resources/>
+    <connections/>
+</ui>

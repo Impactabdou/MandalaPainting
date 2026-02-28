@@ -15,3 +15,7 @@ HEADERS += \
     $$files(view/*.h) \
     $$files(controller/*.h)
 
+FORMS += \
+    view/MandalaPaiting.ui
+
+ui
