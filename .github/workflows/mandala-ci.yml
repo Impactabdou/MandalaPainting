@@ -1,0 +1,27 @@
+name: Mandala CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        run: |
+          sudo apt update
+          sudo apt install -y qtbase5-dev qtchooser qt5-qmake build-essential
+
+      - name: config
+        run: qmake
+
+      - name: build
+        run: make -j$(nproc)
+
+      - name: clean
+        run: make clean distclean
