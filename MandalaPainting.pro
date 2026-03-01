@@ -21,4 +21,4 @@ FORMS += \
 ui
 
 RESOURCES += \
-    ../qt/icons/icons.qrc
+    icons/icons.qrc
