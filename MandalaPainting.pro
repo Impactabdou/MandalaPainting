@@ -19,3 +19,6 @@ FORMS += \
     view/MandalaPaiting.ui
 
 ui
+
+RESOURCES += \
+    ../qt/icons/icons.qrc
