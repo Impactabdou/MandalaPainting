@@ -9,6 +9,9 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(QWidget *parent = nullptr);
 
+private slots:
+    void on_colorSelectBtn_clicked();
+
 private:
-    Ui::MandalaMainWindow ui;
+    Ui::MainWindow ui;
 };
