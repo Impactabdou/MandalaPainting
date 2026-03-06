@@ -5,9 +5,10 @@
 #include <QPixmap>
 #include <QCursor>
 #include <QDebug>
+#include <QMouseEvent>
 
 CanvasWidget::CanvasWidget(QWidget *parent)
-    : QWidget(parent), gridDrawer(new GridDrawer(0)), canvasHeight(400), canvasWidth(400) {
+    : QWidget(parent), _gridDrawer(2), _canvasHeight(400), _canvasWidth(400) {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QPixmap cursorPixmap("://default_pencil.png");
@@ -24,44 +25,118 @@ CanvasWidget::CanvasWidget(QWidget *parent)
 
 void CanvasWidget::paintEvent(QPaintEvent *) {
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
     QRect canvasRect(
-        (width() - canvasWidth) / 2,
-        (height() - canvasHeight) / 2,
-        canvasWidth,
-        canvasHeight
+        (width() - _canvasWidth) / 2,
+        (height() - _canvasHeight) / 2,
+        _canvasWidth,
+        _canvasHeight
     );
+
     painter.fillRect(canvasRect, Qt::white);
 
-    QPen pen(QColor(210, 210, 210));
-    pen.setWidth(2);
-    painter.setPen(pen);
-
-
+    QPen borderPen(QColor(210, 210, 210));
+    borderPen.setWidth(2);
+    painter.setPen(borderPen);
     painter.drawRoundedRect(canvasRect.adjusted(1, 1, -2, -2), 8, 8);
+
     painter.save();
     painter.setClipRect(canvasRect);
-    gridDrawer->drawGrid(painter, canvasRect);
+
+    _gridDrawer.drawGrid(painter, canvasRect);
+
+    QPen drawPen(Qt::magenta);
+    drawPen.setJoinStyle(Qt::RoundJoin);
+    drawPen.setWidth(3);
+    drawPen.setCapStyle(Qt::RoundCap);
+    painter.setPen(drawPen);
+
+    for (const auto &stroke: _paintedStrokes) {
+        painter.drawLine(stroke.first, stroke.second);
+    }
+
     painter.restore();
 }
 
 void CanvasWidget::setCanvasSize(int width, int height) {
-    canvasWidth = width;
-    canvasHeight = height;
+    _canvasWidth = width;
+    _canvasHeight = height;
     update();
 }
 
 void CanvasWidget::setSlices(int slices) {
     if (slices < 2) {
-        gridDrawer->setSlices(0);
-        update();
-        return;
+        _gridDrawer.setSlices(0);
     }
-    gridDrawer->setSlices(slices);
+    _gridDrawer.setSlices(slices);
+    _mandalaModel.setSlices(slices);
+    repaintMandala();
     update();
 }
 
 void CanvasWidget::setGridOpacity(int width) {
-    gridDrawer->setGridOpacity(width);
+    _gridDrawer.setGridOpacity(width);
     update();
 }
 
+void CanvasWidget::clear() {
+    _strokes.clear();
+    _paintedStrokes.clear();
+    update();
+}
+
+void CanvasWidget::setMirror(bool mirror) {
+    _mandalaModel.setMirror(mirror);
+    repaintMandala();
+    update();
+}
+
+void CanvasWidget::mousePressEvent(QMouseEvent *event) {
+    _mouseController.handlePress(event);
+}
+
+void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
+    _mouseController.handleMove(event);
+
+    QRect canvasRect(
+        (width() - _canvasWidth) / 2,
+        (height() - _canvasHeight) / 2,
+        _canvasWidth,
+        _canvasHeight
+    );
+
+    if (!_mouseController.isDrawing()) { return; }
+    if (!canvasRect.contains(event->pos())) { return; }
+
+    QPoint lastpos = _mouseController.getLastPosition();
+    QPoint currentpos = _mouseController.getCurrentPosition();
+
+    _strokes.push_back({lastpos, currentpos});
+    _mouseController.setLastPosition(currentpos);
+    repaintMandala();
+    update();
+}
+
+void CanvasWidget::mouseReleaseEvent(QMouseEvent *event) {
+    _mouseController.handleRelease(event);
+}
+
+void CanvasWidget::repaintMandala() {
+    _paintedStrokes.clear();
+    QRect canvasRect(
+        (width() - _canvasWidth) / 2,
+        (height() - _canvasHeight) / 2,
+        _canvasWidth,
+        _canvasHeight
+    );
+    QPoint center(canvasRect.center());
+
+    for (const auto &stroke: _strokes) {
+        auto mandalaLines = _mandalaModel.generateMandalaLines(stroke.first
+                                                               , stroke.second, center);
+
+        for (const auto &line: mandalaLines) {
+            _paintedStrokes.push_back(line);
+        }
+    }
+}

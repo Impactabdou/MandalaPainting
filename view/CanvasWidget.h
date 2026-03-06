@@ -1,6 +1,8 @@
 #pragma once
 #include <QWidget>
 #include "GridDrawer.h"
+#include "MouseController.h"
+#include  "model/MandalaModel.h"
 
 class CanvasWidget : public QWidget {
     Q_OBJECT
@@ -8,17 +10,34 @@ class CanvasWidget : public QWidget {
 public:
     explicit CanvasWidget(QWidget *parent = nullptr);
 
+
     void setCanvasSize(int width, int height);
 
     void setSlices(int slices);
 
     void setGridOpacity(int width);
 
+    void clear();
+
+    void setMirror(bool mirror);
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
+    void mousePressEvent(QMouseEvent *event) override;
+
+    void mouseMoveEvent(QMouseEvent *event) override;
+
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
 private:
-    GridDrawer *gridDrawer;
-    int canvasHeight;
-    int canvasWidth;
+    GridDrawer _gridDrawer;
+    int _canvasHeight;
+    int _canvasWidth;
+    MouseController _mouseController;
+    std::vector<std::pair<QPoint, QPoint> > _strokes;
+    MandalaModel _mandalaModel;
+    std::vector<std::pair<QPoint, QPoint> > _paintedStrokes;
+
+    void repaintMandala();
 };

@@ -14,6 +14,6 @@ private slots:
     void on_colorSelectBtn_clicked();
 
 private:
-    Ui::MainWindow *ui;
-    CanvasWidget *canvas;
+    Ui::MainWindow *_ui;
+    CanvasWidget *_canvas;
 };

@@ -3,15 +3,15 @@
 #include <QColorDialog>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
-    ui->setupUi(this);
+    : QMainWindow(parent), _ui(new Ui::MainWindow) {
+    _ui->setupUi(this);
 
-    canvas = new CanvasWidget(ui->canvasFrame);
+    _canvas = new CanvasWidget(_ui->canvasFrame);
 
-    ui->canvasLayout->setContentsMargins(0, 0, 0, 0);
-    ui->canvasLayout->setSpacing(0);
+    _ui->canvasLayout->setContentsMargins(0, 0, 0, 0);
+    _ui->canvasLayout->setSpacing(0);
 
-    ui->canvasLayout->addWidget(canvas);
+    _ui->canvasLayout->addWidget(_canvas);
 
     // default color at start
 
@@ -21,52 +21,58 @@ MainWindow::MainWindow(QWidget *parent)
 
     colorSquare.fill(chosenColor);
 
-    ui->colorSelectBtn->setIcon(QIcon(colorSquare));
+    _ui->colorSelectBtn->setIcon(QIcon(colorSquare));
 
-    connect(ui->sliderSlices,
+    connect(_ui->sliderSlices,
             &QSlider::valueChanged,
-            canvas,
+            _canvas,
             &CanvasWidget::setSlices);
 
-    connect(ui->sliderSlices,
+    connect(_ui->sliderSlices,
             &QSlider::valueChanged,
-            ui->spinSlices,
+            _ui->spinSlices,
             &QSpinBox::setValue);
 
-    connect(ui->spinSlices,
+    connect(_ui->spinSlices,
             QOverload<int>::of(&QSpinBox::valueChanged),
-            ui->sliderSlices,
+            _ui->sliderSlices,
             &QSlider::setValue);
 
 
-    connect(ui->comboCanvasSize,
+    connect(_ui->comboCanvasSize,
             QOverload<int>::of(&QComboBox::currentIndexChanged),
             this,
             [this](const int index) {
                 constexpr int sizes[] = {400, 600, 800};
 
                 if (index >= 0 && index < 3)
-                    canvas->setCanvasSize(sizes[index], sizes[index]);
+                    _canvas->setCanvasSize(sizes[index], sizes[index]);
             });
 
 
-    connect(ui->sliderGrid,
+    connect(_ui->sliderGrid,
             &QSlider::valueChanged,
             this,
             [this](const int value) {
-                if (ui->checkGrid->isChecked())
-                    canvas->setGridOpacity(value);
+                if (_ui->checkGrid->isChecked())
+                    _canvas->setGridOpacity(value);
             });
 
 
-    connect(ui->checkGrid,
+    connect(_ui->checkGrid,
             &QCheckBox::toggled,
             this,
             [this](const bool checked) {
-                ui->sliderGrid->setEnabled(checked);
+                _ui->sliderGrid->setEnabled(checked);
 
-                checked ? canvas->setGridOpacity(ui->sliderGrid->value()) : canvas->setGridOpacity(0);
+                checked ? _canvas->setGridOpacity(_ui->sliderGrid->value()) : _canvas->setGridOpacity(0);
             });
+
+    connect(_ui->btnClear, &QPushButton::clicked, _canvas, &CanvasWidget::clear);
+
+    connect(_ui->checkMirror, &QCheckBox::toggled, this, [this](const bool checked) {
+        _canvas->setMirror(checked);
+    });
 }
 
 
@@ -78,6 +84,6 @@ void MainWindow::on_colorSelectBtn_clicked() {
 
         colorSquare.fill(chosenColor);
 
-        ui->colorSelectBtn->setIcon(QIcon(colorSquare));
+        _ui->colorSelectBtn->setIcon(QIcon(colorSquare));
     }
 }

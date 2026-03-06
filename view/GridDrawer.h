@@ -10,9 +10,9 @@ public:
 
     void setSlices(int slices) { _numberOfSlices = slices; }
 
-    void setGridOpacity(int width) { gridOpacity = width; }
+    void setGridOpacity(int width) { _gridOpacity = width; }
 
 private:
     int _numberOfSlices;
-    int gridOpacity = 3;
+    int _gridOpacity = 90;
 };

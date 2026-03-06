@@ -9,7 +9,7 @@ GridDrawer::GridDrawer(int slices) : _numberOfSlices(slices) {
 
 void GridDrawer::drawGrid(QPainter &painter, const QRect &area) {
     painter.setRenderHints(QPainter::Antialiasing);
-    QPen pen(QColor(50, 50, 50, gridOpacity));
+    QPen pen(QColor(50, 50, 50, _gridOpacity));
     pen.setStyle(Qt::DotLine);
     pen.setWidth(4);
     painter.setPen(pen);
