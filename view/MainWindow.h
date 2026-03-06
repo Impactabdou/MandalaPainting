@@ -1,7 +1,8 @@
 #pragma once
 
-#include <QMainWindow>
-#include "ui_MandalaPaiting.h"
+#include "ui_MandalaPainting.h"
+#include "CanvasWidget.h"
+
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -13,5 +14,6 @@ private slots:
     void on_colorSelectBtn_clicked();
 
 private:
-    Ui::MainWindow ui;
+    Ui::MainWindow *ui;
+    CanvasWidget *canvas;
 };
