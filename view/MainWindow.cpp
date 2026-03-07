@@ -76,6 +76,20 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_ui->sliderLineWidth, &QSlider::valueChanged, this, [this](const int value) {
         _canvas->setPenWidth(value);
     });
+
+    connect(_ui->actionUndo, &QAction::triggered, this, &MainWindow::on_undo);
+    connect(_ui->actionRedo, &QAction::triggered, this, &MainWindow::on_redo);
+
+
+}
+
+
+void MainWindow::on_undo(){
+    _canvas->undo();
+}
+
+void MainWindow::on_redo(){
+    _canvas->redo();
 }
 
 

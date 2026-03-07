@@ -23,6 +23,12 @@ public:
 
     void setPenWidth(const int width) { _penWidth = width; }
 
+    void undo();
+
+    void redo();
+
+    void repaintFromModel();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 

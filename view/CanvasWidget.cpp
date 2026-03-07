@@ -6,7 +6,8 @@
 #include <QCursor>
 #include <QDebug>
 #include <QMouseEvent>
-
+#include "model/undocommand.h"
+#include "model/redocommande.h"
 CanvasWidget::CanvasWidget(QWidget *parent)
     : QWidget(parent), _gridDrawer(2), _canvasHeight(400), _canvasWidth(400), _penWidth(3) {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -143,3 +144,43 @@ void CanvasWidget::repaintMandala() {
         }
     }
 }
+
+void CanvasWidget::repaintFromModel() {
+    _paintedStrokes.clear();
+
+    // Note: You no longer need canvasRect and center here because the coordinates
+    // saved in your model are already calculated!
+
+    QList<std::vector<std::pair<Point, Point>>> allLines = _mandalaModel.getAllines();
+    int currentIdx = _mandalaModel.getCurrentIdx();
+
+    // 1. Loop through the history only up to the currentIdx
+    for (int i = 0; i < currentIdx && i < allLines.size(); ++i) {
+        const auto& strokeGroup = allLines[i]; // This is the std::vector of lines
+
+        // 2. Nested loop: go through every line in this specific stroke group
+        for (const auto& line : strokeGroup) {
+            _paintedStrokes.emplace_back(
+                QPoint(static_cast<int>(line.first.x), static_cast<int>(line.first.y)),
+                QPoint(static_cast<int>(line.second.x), static_cast<int>(line.second.y))
+                );
+        }
+    }
+}
+
+void CanvasWidget::undo(){
+    _mandalaModel.setCommand(new UndoCommand(_mandalaModel));
+    _mandalaModel.executeCommand();
+
+}
+
+void CanvasWidget::redo(){
+    _mandalaModel.setCommand(new RedoCommande(_mandalaModel));
+    _mandalaModel.executeCommand();
+
+}
+
+
+
+
+

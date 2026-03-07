@@ -1,14 +1,14 @@
 #include "MandalaModel.h"
 #include <cmath>
 
-MandalaModel::MandalaModel() : _slices(0), _mirrorEffect(false) {
+MandalaModel::MandalaModel() : _slices(0), _mirrorEffect(false),_currentIdx(0) {
 }
 
 std::vector<std::pair<Point, Point> > MandalaModel::generateMandalaLines(
     const Point &p1,
     const Point &p2,
     const Point &center
-) const {
+) {
     std::vector<std::pair<Point, Point> > lines;
 
     if (_slices <= 0) {
@@ -37,6 +37,7 @@ std::vector<std::pair<Point, Point> > MandalaModel::generateMandalaLines(
             lines.emplace_back(mirrorP1, mirrorP2);
         }
     }
+    _allLines.append(lines);
     return lines;
 }
 

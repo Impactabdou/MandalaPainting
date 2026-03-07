@@ -15,9 +15,14 @@ INCLUDEPATH += .
 
 # Input
 HEADERS += view/CanvasWidget.h view/GridDrawer.h view/MainWindow.h \
-           model/GridDrawerModel.h \ view/MouseController.h \ model/MandalaModel.h
+           model/Command.h \
+           model/GridDrawerModel.h \ view/MouseController.h \ model/MandalaModel.h \
+           model/redocommande.h \
+           model/undocommand.h
 FORMS += ui/MandalaPainting.ui
 SOURCES += main.cpp \
+           model/redocommande.cpp \
+           model/undocommand.cpp \
            view/CanvasWidget.cpp \
            view/GridDrawer.cpp \
            view/MainWindow.cpp \
