@@ -73,6 +73,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_ui->checkMirror, &QCheckBox::toggled, this, [this](const bool checked) {
         _canvas->setMirror(checked);
     });
+    connect(_ui->sliderLineWidth, &QSlider::valueChanged, this, [this](const int value) {
+        _canvas->setPenWidth(value);
+    });
 }
 
 

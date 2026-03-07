@@ -21,6 +21,8 @@ public:
 
     void setMirror(bool mirror);
 
+    void setPenWidth(const int width) { _penWidth = width; }
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
@@ -38,6 +40,11 @@ private:
     std::vector<std::pair<QPoint, QPoint> > _strokes;
     MandalaModel _mandalaModel;
     std::vector<std::pair<QPoint, QPoint> > _paintedStrokes;
+    int _penWidth;
+
+    static Point toPoint(const QPoint &point) {
+        return {static_cast<double>(point.x()), static_cast<double>(point.y())};
+    }
 
     void repaintMandala();
 };

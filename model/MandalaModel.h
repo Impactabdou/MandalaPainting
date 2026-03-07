@@ -1,6 +1,6 @@
 #pragma once
-#include <QPoint>
 #include <vector>
+#include "Point.h"
 
 class MandalaModel {
 public:
@@ -8,15 +8,22 @@ public:
 
     void setSlices(int slices) { _slices = slices; }
 
-    std::vector<std::pair<QPoint, QPoint> > generateMandalaLines(
-        const QPoint &p1,
-        const QPoint &p2,
-        const QPoint &center
-    );
+    std::vector<std::pair<Point, Point> > generateMandalaLines(const Point &p1, const Point &p2,
+                                                               const Point &center) const;
 
-    void setMirror(bool mirror) { _mirror = mirror; }
+    void setMirrorEffect(const bool mirrorEffectActived) { _mirrorEffect = mirrorEffectActived; }
 
 private:
     int _slices;
-    bool _mirror;
+    bool _mirrorEffect;
+
+    static Point translationToCenter(const Point &p, const Point &center) {
+        return {p.x - center.x, p.y - center.y};
+    }
+
+    static Point translationFromCenter(const Point &p, const Point &center) {
+        return {p.x + center.x, p.y + center.y};
+    }
+
+    static Point rotatePoint(const Point &p, double angle);
 };

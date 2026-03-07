@@ -4,29 +4,37 @@
 
 #include "model/GridDrawerModel.h"
 
-GridDrawer::GridDrawer(int slices) : _numberOfSlices(slices) {
+GridDrawer::GridDrawer(const int slices) : _numberOfSlices(slices) {
 }
 
-void GridDrawer::drawGrid(QPainter &painter, const QRect &area) {
+void GridDrawer::drawGrid(QPainter &painter, const QRect &area) const {
+    if (_numberOfSlices <= 0) {
+        return;
+    }
     painter.setRenderHints(QPainter::Antialiasing);
+
     QPen pen(QColor(50, 50, 50, _gridOpacity));
     pen.setStyle(Qt::DotLine);
     pen.setWidth(4);
     painter.setPen(pen);
 
 
-    std::vector<std::pair<int, int> > coordinates;
-    double radius = area.width() * area.width() + area.height() * area.height();
-    GridDrawerModel::computeGridPositions(coordinates, radius, area.center().x(), area.center().y(), _numberOfSlices);
-#ifdef QT_DEBUG
-    for (auto &coord: coordinates) {
-        qDebug() << "Coordinate: (" << coord.first << ", " << coord.second << ")";
-    }
-#endif
+    std::vector<std::pair<double, double> > coordinates;
+    double diagonal = area.width() * area.width() + area.height() * area.height();
+    GridDrawerModel::computeGridPositions(
+        coordinates,
+        diagonal,
+        area.center().x(),
+        area.center().y(),
+        _numberOfSlices
+    );
 
-    for (int i = 0; i < _numberOfSlices; ++i) {
-        int x = coordinates[i].first;
-        int y = coordinates[i].second;
-        painter.drawLine(area.center().x(), area.center().y(), x, y);
+    for (const auto &coordinate: coordinates) {
+        painter.drawLine(
+            area.center().x(),
+            area.center().y(),
+            static_cast<int>(coordinate.first),
+            static_cast<int>(coordinate.second)
+        );
     }
 }
