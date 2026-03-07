@@ -1,6 +1,6 @@
 #include "CanvasWidget.h"
-
-
+#include "model/drawcommand.h"
+#include <QUndoStack>
 #include <QPainter>
 #include <QPixmap>
 #include <QCursor>
@@ -10,6 +10,10 @@
 CanvasWidget::CanvasWidget(QWidget *parent)
     : QWidget(parent), _gridDrawer(2), _canvasHeight(400), _canvasWidth(400), _penWidth(3) {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    _undoStack = new QUndoStack(this);
+
+    _mandalaModel.setSlices(2);
 
     QPixmap cursorPixmap("://default_pencil.png");
 
@@ -22,7 +26,6 @@ CanvasWidget::CanvasWidget(QWidget *parent)
     }
 }
 
-
 void CanvasWidget::paintEvent(QPaintEvent *) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -31,7 +34,7 @@ void CanvasWidget::paintEvent(QPaintEvent *) {
         (height() - _canvasHeight) / 2,
         _canvasWidth,
         _canvasHeight
-    );
+        );
 
     painter.fillRect(canvasRect, Qt::white);
 
@@ -80,8 +83,9 @@ void CanvasWidget::setGridOpacity(int width) {
 }
 
 void CanvasWidget::clear() {
-    _strokes.clear();
     _paintedStrokes.clear();
+    _undoStack->clear();
+    _mandalaModel.clear();
     update();
 }
 
@@ -93,6 +97,7 @@ void CanvasWidget::setMirror(bool mirror) {
 
 void CanvasWidget::mousePressEvent(QMouseEvent *event) {
     _mouseController.handlePress(event);
+    _currentStrokeSegments.clear();
 }
 
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
@@ -103,7 +108,7 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
         (height() - _canvasHeight) / 2,
         _canvasWidth,
         _canvasHeight
-    );
+        );
 
     if (!_mouseController.isDrawing()) { return; }
     if (!canvasRect.contains(event->pos())) { return; }
@@ -111,7 +116,10 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     QPoint lastpos = _mouseController.getLastPosition();
     QPoint currentpos = _mouseController.getCurrentPosition();
 
-    _strokes.emplace_back(lastpos, currentpos);
+    _currentStrokeSegments.emplace_back(lastpos, currentpos);
+
+    _mandalaModel.draw(lastpos, currentpos);
+
     _mouseController.setLastPosition(currentpos);
     repaintMandala();
     update();
@@ -119,6 +127,18 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
 
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *event) {
     _mouseController.handleRelease(event);
+
+    if (!_currentStrokeSegments.empty()) {
+        _mandalaModel.removeLastSegments(_currentStrokeSegments.size());
+
+        DrawCommand* cmd = new DrawCommand(&_mandalaModel, _currentStrokeSegments);
+        _undoStack->push(cmd);
+
+        _currentStrokeSegments.clear();
+
+        repaintMandala();
+        update();
+    }
 }
 
 void CanvasWidget::repaintMandala() {
@@ -128,10 +148,12 @@ void CanvasWidget::repaintMandala() {
         (height() - _canvasHeight) / 2,
         _canvasWidth,
         _canvasHeight
-    );
+        );
     const QPoint center(canvasRect.center());
 
-    for (const auto &stroke: _strokes) {
+    const auto strokes = _mandalaModel.getStrokes();
+
+    for (const auto &stroke: strokes) {
         auto mandalaLines = _mandalaModel.generateMandalaLines(toPoint(stroke.first)
                                                                , toPoint(stroke.second), toPoint(center));
 
@@ -139,7 +161,19 @@ void CanvasWidget::repaintMandala() {
             _paintedStrokes.emplace_back(
                 QPoint(static_cast<int>(line.first.x), static_cast<int>(line.first.y)),
                 QPoint(static_cast<int>(line.second.x), static_cast<int>(line.second.y))
-            );
+                );
         }
     }
+}
+
+void CanvasWidget::undo() {
+    _undoStack->undo();
+    repaintMandala();
+    update();
+}
+
+void CanvasWidget::redo() {
+    _undoStack->redo();
+    repaintMandala();
+    update();
 }

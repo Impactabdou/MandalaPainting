@@ -3,6 +3,7 @@
 #include "GridDrawer.h"
 #include "MouseController.h"
 #include  "model/MandalaModel.h"
+#include <QUndoStack>
 
 class CanvasWidget : public QWidget {
     Q_OBJECT
@@ -23,6 +24,12 @@ public:
 
     void setPenWidth(const int width) { _penWidth = width; }
 
+    void undo();
+
+    void redo();
+
+    void repaintFromModel();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
@@ -37,10 +44,11 @@ private:
     int _canvasHeight;
     int _canvasWidth;
     MouseController _mouseController;
-    std::vector<std::pair<QPoint, QPoint> > _strokes;
     MandalaModel _mandalaModel;
     std::vector<std::pair<QPoint, QPoint> > _paintedStrokes;
     int _penWidth;
+    QUndoStack* _undoStack;
+    std::vector<std::pair<QPoint, QPoint>> _currentStrokeSegments;
 
     static Point toPoint(const QPoint &point) {
         return {static_cast<double>(point.x()), static_cast<double>(point.y())};
