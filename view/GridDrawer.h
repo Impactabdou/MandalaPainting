@@ -6,7 +6,7 @@ class GridDrawer {
 public:
     explicit GridDrawer(int slices = 0);
 
-    void drawGrid(QPainter &painter, const QRect &area);
+    void drawGrid(QPainter &painter, const QRect &area) const;
 
     void setSlices(int slices) { _numberOfSlices = slices; }
 

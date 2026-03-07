@@ -1,13 +1,18 @@
 #include "GridDrawerModel.h"
 #include <cmath>
 
-void GridDrawerModel::computeGridPositions(std::vector<std::pair<int, int> > &coordinates, double radius, int centerX,
-                                           int centerY,
-                                           int slices) {
+#include "Point.h"
+
+void GridDrawerModel::computeGridPositions(std::vector<std::pair<double,double> > &coordinates, const double diagonal,
+                                           const int centerX,
+                                           const int centerY,
+                                           const int slices) {
+    if (slices <= 0) {
+        return;
+    }
     for (int i = 0; i < slices; ++i) {
-        double angle = (2 * M_PI / slices) * i;
-        int x = centerX + sqrt(radius) / 2.0 * cos(angle);
-        int y = centerY + sqrt(radius) / 2.0 * sin(angle);
-        coordinates.push_back({x, y});
+        const double angle = (2 * M_PI / slices) * i;
+        Point point = {centerX + sqrt(diagonal) / 2.0 * cos(angle), centerY + sqrt(diagonal) / 2.0 * sin(angle)};
+        coordinates.emplace_back(point.x, point.y);
     }
 }

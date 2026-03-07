@@ -8,7 +8,7 @@
 #include <QMouseEvent>
 
 CanvasWidget::CanvasWidget(QWidget *parent)
-    : QWidget(parent), _gridDrawer(2), _canvasHeight(400), _canvasWidth(400) {
+    : QWidget(parent), _gridDrawer(2), _canvasHeight(400), _canvasWidth(400), _penWidth(3) {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QPixmap cursorPixmap("://default_pencil.png");
@@ -36,7 +36,7 @@ void CanvasWidget::paintEvent(QPaintEvent *) {
     painter.fillRect(canvasRect, Qt::white);
 
     QPen borderPen(QColor(210, 210, 210));
-    borderPen.setWidth(2);
+    borderPen.setWidth(6);
     painter.setPen(borderPen);
     painter.drawRoundedRect(canvasRect.adjusted(1, 1, -2, -2), 8, 8);
 
@@ -47,7 +47,7 @@ void CanvasWidget::paintEvent(QPaintEvent *) {
 
     QPen drawPen(Qt::magenta);
     drawPen.setJoinStyle(Qt::RoundJoin);
-    drawPen.setWidth(3);
+    drawPen.setWidth(_penWidth);
     drawPen.setCapStyle(Qt::RoundCap);
     painter.setPen(drawPen);
 
@@ -86,7 +86,7 @@ void CanvasWidget::clear() {
 }
 
 void CanvasWidget::setMirror(bool mirror) {
-    _mandalaModel.setMirror(mirror);
+    _mandalaModel.setMirrorEffect(mirror);
     repaintMandala();
     update();
 }
@@ -111,7 +111,7 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     QPoint lastpos = _mouseController.getLastPosition();
     QPoint currentpos = _mouseController.getCurrentPosition();
 
-    _strokes.push_back({lastpos, currentpos});
+    _strokes.emplace_back(lastpos, currentpos);
     _mouseController.setLastPosition(currentpos);
     repaintMandala();
     update();
@@ -129,14 +129,17 @@ void CanvasWidget::repaintMandala() {
         _canvasWidth,
         _canvasHeight
     );
-    QPoint center(canvasRect.center());
+    const QPoint center(canvasRect.center());
 
     for (const auto &stroke: _strokes) {
-        auto mandalaLines = _mandalaModel.generateMandalaLines(stroke.first
-                                                               , stroke.second, center);
+        auto mandalaLines = _mandalaModel.generateMandalaLines(toPoint(stroke.first)
+                                                               , toPoint(stroke.second), toPoint(center));
 
         for (const auto &line: mandalaLines) {
-            _paintedStrokes.push_back(line);
+            _paintedStrokes.emplace_back(
+                QPoint(static_cast<int>(line.first.x), static_cast<int>(line.first.y)),
+                QPoint(static_cast<int>(line.second.x), static_cast<int>(line.second.y))
+            );
         }
     }
 }
