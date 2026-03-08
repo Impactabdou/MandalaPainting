@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include <QPixmap>
 #include <QColorDialog>
+#include "view/linepreview.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _ui(new Ui::MainWindow) {
@@ -75,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(_ui->sliderLineWidth, &QSlider::valueChanged, this, [this](const int value) {
         _canvas->setPenWidth(value);
+        _ui->lineWidthPreview->setPenWidth(value);
     });
 
     connect(_ui->actionUndo, &QAction::triggered, this, &MainWindow::on_undo);
@@ -99,9 +101,11 @@ void MainWindow::on_colorSelectBtn_clicked() {
 
     if (chosenColor.isValid()) {
         QPixmap colorSquare(16, 16);
-
         colorSquare.fill(chosenColor);
-
         _ui->colorSelectBtn->setIcon(QIcon(colorSquare));
+
+
+        _canvas->setPenColor(chosenColor);
+        _ui->lineWidthPreview->setPenColor(chosenColor);
     }
 }

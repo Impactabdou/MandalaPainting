@@ -187,11 +187,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="lineWidthPreview">
+        <widget class="LinePreview" name="lineWidthPreview">
          <property name="minimumSize">
           <size>
-           <width>20</width>
-           <height>20</height>
+           <width>24</width>
+           <height>24</height>
           </size>
          </property>
          <property name="frameShape">
@@ -376,6 +376,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LinePreview</class>
+   <extends>QFrame</extends>
+   <header>view/linepreview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../icons/icons.qrc"/>
   <include location="../icons/icons.qrc"/>

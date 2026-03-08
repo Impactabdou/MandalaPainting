@@ -48,7 +48,7 @@ void CanvasWidget::paintEvent(QPaintEvent *) {
 
     _gridDrawer.drawGrid(painter, canvasRect);
 
-    QPen drawPen(Qt::magenta);
+    QPen drawPen(_currColor);
     drawPen.setJoinStyle(Qt::RoundJoin);
     drawPen.setWidth(_penWidth);
     drawPen.setCapStyle(Qt::RoundCap);
