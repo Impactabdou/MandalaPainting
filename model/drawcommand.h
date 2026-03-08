@@ -6,18 +6,18 @@
 #include <vector>
 #include <utility>
 #include "MandalaModel.h"
-
+#include "Stroke.h"
 class DrawCommand : public QUndoCommand
 {
 public:
-    DrawCommand(MandalaModel* model, const std::vector<std::pair<QPoint, QPoint>>& strokeSegments, QUndoCommand* parent = nullptr);
+    DrawCommand(MandalaModel* model, const std::vector<Stroke>& strokeSegments, QUndoCommand* parent = nullptr);
 
     void undo() override;
     void redo() override;
 
 private:
     MandalaModel* _model;
-    std::vector<std::pair<QPoint, QPoint>> _strokeSegments;
+    std::vector<Stroke> _strokeSegments;
 };
 
 #endif // DRAWCOMMAND_H

@@ -4,6 +4,7 @@
 #include "MouseController.h"
 #include  "model/MandalaModel.h"
 #include <QUndoStack>
+#include "model/Stroke.h"
 
 class CanvasWidget : public QWidget {
     Q_OBJECT
@@ -32,6 +33,8 @@ public:
 
     void setPenColor(QColor color) { _currColor = color;};
 
+    int getSlices() const { return _mandalaModel.getSlices(); }
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
@@ -49,10 +52,10 @@ private:
     int _canvasWidth;
     MouseController _mouseController;
     MandalaModel _mandalaModel;
-    std::vector<std::pair<QPoint, QPoint> > _paintedStrokes;
+    std::vector<Stroke> _paintedStrokes;
     int _penWidth;
     QUndoStack* _undoStack;
-    std::vector<std::pair<QPoint, QPoint>> _currentStrokeSegments;
+    std::vector<Stroke> _currentStrokeSegments;
     QColor _currColor = Qt::black;
 
     static Point toPoint(const QPoint &point) {

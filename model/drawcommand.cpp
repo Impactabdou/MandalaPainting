@@ -1,6 +1,6 @@
 #include "drawcommand.h"
 
-DrawCommand::DrawCommand(MandalaModel* model, const std::vector<std::pair<QPoint, QPoint>>& strokeSegments, QUndoCommand* parent)
+DrawCommand::DrawCommand(MandalaModel* model,  const std::vector<Stroke>& strokeSegments, QUndoCommand* parent)
     : QUndoCommand(parent), _model(model), _strokeSegments(strokeSegments)
 {
     setText("Draw Stroke");

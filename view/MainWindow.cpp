@@ -88,11 +88,17 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::on_undo(){
     _canvas->undo();
+    int slices = _canvas->getSlices();
+    _ui->sliderSlices->setValue(slices);
+    _ui->spinSlices->setValue(slices);
 }
 
 
 void MainWindow::on_redo(){
     _canvas->redo();
+    int slices = _canvas->getSlices();
+    _ui->sliderSlices->setValue(slices);
+    _ui->spinSlices->setValue(slices);
 }
 
 

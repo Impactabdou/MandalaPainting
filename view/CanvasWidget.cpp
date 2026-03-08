@@ -6,6 +6,7 @@
 #include <QCursor>
 #include <QDebug>
 #include <QMouseEvent>
+#include "model/SliceCommand.h"
 
 CanvasWidget::CanvasWidget(QWidget *parent)
     : QWidget(parent), _gridDrawer(2), _canvasHeight(400), _canvasWidth(400), _penWidth(3) {
@@ -48,14 +49,15 @@ void CanvasWidget::paintEvent(QPaintEvent *) {
 
     _gridDrawer.drawGrid(painter, canvasRect);
 
-    QPen drawPen(_currColor);
-    drawPen.setJoinStyle(Qt::RoundJoin);
-    drawPen.setWidth(_penWidth);
-    drawPen.setCapStyle(Qt::RoundCap);
-    painter.setPen(drawPen);
-
     for (const auto &stroke: _paintedStrokes) {
-        painter.drawLine(stroke.first, stroke.second);
+
+        QPen pen(stroke.color);
+        pen.setWidth(stroke.width);
+        pen.setJoinStyle(Qt::RoundJoin);
+        pen.setCapStyle(Qt::RoundCap);
+
+        painter.setPen(pen);
+        painter.drawLine(stroke.p1, stroke.p2);
     }
 
     painter.restore();
@@ -72,7 +74,8 @@ void CanvasWidget::setSlices(int slices) {
         _gridDrawer.setSlices(0);
     }
     _gridDrawer.setSlices(slices);
-    _mandalaModel.setSlices(slices);
+    _undoStack->push(new SliceCommand(&_mandalaModel,slices));
+    _gridDrawer.setSlices(_mandalaModel.getSlices());
     repaintMandala();
     update();
 }
@@ -116,10 +119,15 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     QPoint lastpos = _mouseController.getLastPosition();
     QPoint currentpos = _mouseController.getCurrentPosition();
 
-    _currentStrokeSegments.emplace_back(lastpos, currentpos);
+    Stroke segment;
+    segment.p1 = lastpos;
+    segment.p2 = currentpos;
+    segment.color = _currColor;
+    segment.width = _penWidth;
 
-    _mandalaModel.draw(lastpos, currentpos);
+    _currentStrokeSegments.push_back(segment);
 
+    _mandalaModel.draw(lastpos, currentpos, _currColor, _penWidth);
     _mouseController.setLastPosition(currentpos);
     repaintMandala();
     update();
@@ -154,26 +162,30 @@ void CanvasWidget::repaintMandala() {
     const auto strokes = _mandalaModel.getStrokes();
 
     for (const auto &stroke: strokes) {
-        auto mandalaLines = _mandalaModel.generateMandalaLines(toPoint(stroke.first)
-                                                               , toPoint(stroke.second), toPoint(center));
+        auto mandalaLines = _mandalaModel.generateMandalaLines(toPoint(stroke.p1),toPoint(stroke.p2),toPoint(center));
 
         for (const auto &line: mandalaLines) {
-            _paintedStrokes.emplace_back(
-                QPoint(static_cast<int>(line.first.x), static_cast<int>(line.first.y)),
-                QPoint(static_cast<int>(line.second.x), static_cast<int>(line.second.y))
-                );
+            Stroke s;
+            s.p1 = QPoint(static_cast<int>(line.first.x), static_cast<int>(line.first.y));
+            s.p2 = QPoint(static_cast<int>(line.second.x), static_cast<int>(line.second.y));
+            s.color = stroke.color;
+            s.width = stroke.width;
+
+            _paintedStrokes.push_back(s);
         }
     }
 }
 
 void CanvasWidget::undo() {
     _undoStack->undo();
+    _gridDrawer.setSlices(_mandalaModel.getSlices());
     repaintMandala();
     update();
 }
 
 void CanvasWidget::redo() {
     _undoStack->redo();
+    _gridDrawer.setSlices(_mandalaModel.getSlices());
     repaintMandala();
     update();
 }

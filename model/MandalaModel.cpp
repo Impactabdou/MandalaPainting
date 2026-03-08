@@ -6,8 +6,10 @@ MandalaModel::MandalaModel() : _slices(0), _mirrorEffect(false),_max(0) {
 }
 
 void MandalaModel::draw(const QPoint lastpos,
-                        const QPoint currentpos){
-    _strokes.emplace_back(lastpos, currentpos);
+                        const QPoint currentpos,
+                        const QColor& color,
+                        int width){
+    _strokes.push_back({lastpos, currentpos, color, width});
     _max = _strokes.size() - 1;
 }
 
@@ -16,7 +18,7 @@ void MandalaModel::clear(){
     _max = 0;
 }
 
-void MandalaModel::addStrokeSegments(const std::vector<std::pair<QPoint, QPoint>>& segments) {
+void MandalaModel::addStrokeSegments(const std::vector<Stroke>& segments){
     _strokes.insert(_strokes.end(), segments.begin(), segments.end());
     _max = _strokes.size() - 1;
 }
@@ -28,11 +30,10 @@ void MandalaModel::removeLastSegments(int count) {
     }
 }
 
-std::vector<std::pair<QPoint, QPoint>> MandalaModel::getStrokes() {
-    int endIndex = std::min(_max + 1, static_cast<int>(_strokes.size()));
-    return std::vector<std::pair<QPoint, QPoint>>(_strokes.begin(), _strokes.begin() + endIndex);
-};
-
+std::vector<Stroke> MandalaModel::getStrokes(){
+    int endIndex = std::min(_max + 1, (int)_strokes.size());
+    return std::vector<Stroke>(_strokes.begin(), _strokes.begin() + endIndex);
+}
 
 
 std::vector<std::pair<Point, Point> > MandalaModel::generateMandalaLines(
