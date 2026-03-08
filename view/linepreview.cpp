@@ -1,4 +1,4 @@
-#include "linepreview.h""
+#include "linepreview.h"
 #include <QPainter>
 
 LinePreview::LinePreview(QWidget* parent) : QFrame(parent) {

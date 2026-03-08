@@ -22,7 +22,7 @@ void MandalaModel::addStrokeSegments(const std::vector<std::pair<QPoint, QPoint>
 }
 
 void MandalaModel::removeLastSegments(int count) {
-    if (count <= _strokes.size()) {
+    if (count <= (int)_strokes.size()) {
         _strokes.resize(_strokes.size() - count);
         _max = _strokes.size() - 1;
     }
