@@ -1,14 +1,45 @@
 #include "MandalaModel.h"
 #include <cmath>
+#include <algorithm>
 
-MandalaModel::MandalaModel() : _slices(0), _mirrorEffect(false) {
+MandalaModel::MandalaModel() : _slices(0), _mirrorEffect(false),_max(0) {
 }
+
+void MandalaModel::draw(const QPoint lastpos,
+                        const QPoint currentpos){
+    _strokes.emplace_back(lastpos, currentpos);
+    _max = _strokes.size() - 1;
+}
+
+void MandalaModel::clear(){
+    _strokes.clear();
+    _max = 0;
+}
+
+void MandalaModel::addStrokeSegments(const std::vector<std::pair<QPoint, QPoint>>& segments) {
+    _strokes.insert(_strokes.end(), segments.begin(), segments.end());
+    _max = _strokes.size() - 1;
+}
+
+void MandalaModel::removeLastSegments(int count) {
+    if (count <= _strokes.size()) {
+        _strokes.resize(_strokes.size() - count);
+        _max = _strokes.size() - 1;
+    }
+}
+
+std::vector<std::pair<QPoint, QPoint>> MandalaModel::getStrokes() {
+    int endIndex = std::min(_max + 1, static_cast<int>(_strokes.size()));
+    return std::vector<std::pair<QPoint, QPoint>>(_strokes.begin(), _strokes.begin() + endIndex);
+};
+
+
 
 std::vector<std::pair<Point, Point> > MandalaModel::generateMandalaLines(
     const Point &p1,
     const Point &p2,
     const Point &center
-) const {
+) {
     std::vector<std::pair<Point, Point> > lines;
 
     if (_slices <= 0) {
