@@ -1,4 +1,4 @@
-#include "drawcommand.h""
+#include "drawcommand.h"
 
 DrawCommand::DrawCommand(MandalaModel* model, const std::vector<std::pair<QPoint, QPoint>>& strokeSegments, QUndoCommand* parent)
     : QUndoCommand(parent), _model(model), _strokeSegments(strokeSegments)

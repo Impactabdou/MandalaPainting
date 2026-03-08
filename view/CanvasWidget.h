@@ -30,6 +30,8 @@ public:
 
     void repaintFromModel();
 
+    void setPenColor(QColor color) { _currColor = color;};
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
@@ -38,6 +40,8 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
 
     void mouseReleaseEvent(QMouseEvent *event) override;
+
+
 
 private:
     GridDrawer _gridDrawer;
@@ -49,6 +53,7 @@ private:
     int _penWidth;
     QUndoStack* _undoStack;
     std::vector<std::pair<QPoint, QPoint>> _currentStrokeSegments;
+    QColor _currColor = Qt::black;
 
     static Point toPoint(const QPoint &point) {
         return {static_cast<double>(point.x()), static_cast<double>(point.y())};
