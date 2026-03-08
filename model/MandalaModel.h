@@ -3,7 +3,7 @@
 #include "Point.h"
 #include "QList"
 #include "qpoint.h"
-
+#include "Stroke.h"
 class MandalaModel {
 public:
     MandalaModel();
@@ -15,24 +15,26 @@ public:
 
     void setMirrorEffect(const bool mirrorEffectActived) { _mirrorEffect = mirrorEffectActived; }
 
-    void draw(const QPoint lastpos,
-              const QPoint currentpos);
+    void draw(const QPoint lastpos,const QPoint currentpos,const QColor& color,int width);
 
     void undo();
 
     void redo();
 
-    void addStrokeSegments(const std::vector<std::pair<QPoint, QPoint>>& segments);
+    void addStrokeSegments(const std::vector<Stroke>& segments);
+
     void removeLastSegments(int count);
     void clear();
 
-    std::vector<std::pair<QPoint, QPoint>> getStrokes();
+    std::vector<Stroke> getStrokes();
+
+    int getSlices() const { return _slices; }
 
 
 private:
     int _slices;
     bool _mirrorEffect;
-    std::vector<std::pair<QPoint, QPoint>> _strokes;
+    std::vector<Stroke> _strokes;
     int _max;
 
 

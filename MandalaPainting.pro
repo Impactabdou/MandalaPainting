@@ -17,7 +17,8 @@ INCLUDEPATH += .
 HEADERS += view/CanvasWidget.h view/GridDrawer.h view/MainWindow.h \
            model/GridDrawerModel.h \ view/MouseController.h \ model/MandalaModel.h \
            model/drawcommand.h \
-           view/linepreview.h
+           view/linepreview.h \
+           model/SliceCommand.h
 FORMS += ui/MandalaPainting.ui
 SOURCES += main.cpp \
            model/drawcommand.cpp \
@@ -27,5 +28,6 @@ SOURCES += main.cpp \
            model/GridDrawerModel.cpp \
            view/MouseController.cpp \
            model/MandalaModel.cpp \
-           view/linepreview.cpp
+           view/linepreview.cpp \
+           model/SliceCommand.cpp
 RESOURCES += icons/icons.qrc
