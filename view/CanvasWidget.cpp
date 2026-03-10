@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include "model/SliceCommand.h"
+#include <QFileDialog>
 
 CanvasWidget::CanvasWidget(QWidget *parent)
     : QWidget(parent), _gridDrawer(2), _canvasHeight(400), _canvasWidth(400), _penWidth(3) {
@@ -91,7 +92,7 @@ void CanvasWidget::clear() {
     update();
 }
 
-void CanvasWidget::setMirror(bool mirror) {
+void CanvasWidget::setMirror(const bool mirror) {
     _mandalaModel.setMirrorEffect(mirror);
     repaintMandala();
     update();
@@ -138,7 +139,7 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (!_currentStrokeSegments.empty()) {
         _mandalaModel.removeLastSegments(_currentStrokeSegments.size());
 
-        DrawCommand *cmd = new DrawCommand(&_mandalaModel, _currentStrokeSegments);
+        auto *cmd = new DrawCommand(&_mandalaModel, _currentStrokeSegments);
         _undoStack->push(cmd);
 
         _currentStrokeSegments.clear();
@@ -146,6 +147,30 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *event) {
         repaintMandala();
         update();
     }
+}
+
+void CanvasWidget::saveToFile(const QString &filePath) {
+    const QPixmap pixmap = this->grab();
+    QString extension;
+    QString fileName = QFileDialog::getSaveFileName(
+        this,
+        "Save Mandala",
+        filePath,
+        "PNG Image (*.png);;JPEG Image (*.jpg)",
+        &extension
+    );
+
+    if (fileName.isEmpty()) {
+        return;
+    }
+    if (!fileName.contains(".")) {
+        if (extension.contains("JPEG")) {
+            fileName += ".jpg";
+        } else {
+            fileName += ".png";
+        }
+    }
+    const bool fileSaved = pixmap.save(fileName);
 }
 
 void CanvasWidget::repaintMandala() {

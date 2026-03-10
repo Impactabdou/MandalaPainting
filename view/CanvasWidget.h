@@ -29,11 +29,12 @@ public:
 
     void redo();
 
-    void repaintFromModel();
 
-    void setPenColor(QColor color) { _currColor = color;};
+    void setPenColor(const QColor &color) { _currColor = color; };
 
     int getSlices() const { return _mandalaModel.getSlices(); }
+
+    void saveToFile(const QString &filePath);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -44,8 +45,6 @@ protected:
 
     void mouseReleaseEvent(QMouseEvent *event) override;
 
-
-
 private:
     GridDrawer _gridDrawer;
     int _canvasHeight;
@@ -54,7 +53,7 @@ private:
     MandalaModel _mandalaModel;
     std::vector<Stroke> _paintedStrokes;
     int _penWidth;
-    QUndoStack* _undoStack;
+    QUndoStack *_undoStack;
     std::vector<Stroke> _currentStrokeSegments;
     QColor _currColor = Qt::black;
 
