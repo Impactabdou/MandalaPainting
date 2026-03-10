@@ -2,12 +2,14 @@
 #include <QPixmap>
 #include <QColorDialog>
 #include "view/linepreview.h"
+#include <QDebug>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _ui(new Ui::MainWindow) {
     _ui->setupUi(this);
-    this->setMinimumSize(1000,1000);
-    this->setMaximumSize(1000,1000);
+    this->setMinimumSize(1000, 1000);
+    this->setMaximumSize(1000, 1000);
     _canvas = new CanvasWidget(_ui->canvasFrame);
 
     _ui->canvasLayout->setContentsMargins(0, 0, 0, 0);
@@ -82,8 +84,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(_ui->actionUndo, &QAction::triggered, this, &MainWindow::on_undo);
     connect(_ui->actionRedo, &QAction::triggered, this, &MainWindow::on_redo);
-
-
+    connect(_ui->actionSave_As, &QAction::triggered, this, [this]() {
+        _canvas->saveToFile(QDir::homePath());
+    });
 }
 
 
