@@ -6,7 +6,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _ui(new Ui::MainWindow) {
     _ui->setupUi(this);
-
+    this->setMinimumSize(1000,1000);
+    this->setMaximumSize(1000,1000);
     _canvas = new CanvasWidget(_ui->canvasFrame);
 
     _ui->canvasLayout->setContentsMargins(0, 0, 0, 0);
@@ -86,15 +87,15 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 
-void MainWindow::on_undo(){
+void MainWindow::on_undo() const {
     _canvas->undo();
-    int slices = _canvas->getSlices();
+    const int slices = _canvas->getSlices();
     _ui->sliderSlices->setValue(slices);
     _ui->spinSlices->setValue(slices);
 }
 
 
-void MainWindow::on_redo(){
+void MainWindow::on_redo() const {
     _canvas->redo();
     int slices = _canvas->getSlices();
     _ui->sliderSlices->setValue(slices);

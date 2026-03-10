@@ -22,7 +22,7 @@ CanvasWidget::CanvasWidget(QWidget *parent)
         qDebug() << "Ressources Error: could not locate the pencil canvas";
     } else {
         QPixmap scaledPixmap = cursorPixmap.scaled(32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        QCursor customCursor(scaledPixmap, 0, 0);
+        QCursor customCursor(scaledPixmap, 8, -28);
         this->setCursor(customCursor);
     }
 }
@@ -35,7 +35,7 @@ void CanvasWidget::paintEvent(QPaintEvent *) {
         (height() - _canvasHeight) / 2,
         _canvasWidth,
         _canvasHeight
-        );
+    );
 
     painter.fillRect(canvasRect, Qt::white);
 
@@ -50,7 +50,6 @@ void CanvasWidget::paintEvent(QPaintEvent *) {
     _gridDrawer.drawGrid(painter, canvasRect);
 
     for (const auto &stroke: _paintedStrokes) {
-
         QPen pen(stroke.color);
         pen.setWidth(stroke.width);
         pen.setJoinStyle(Qt::RoundJoin);
@@ -74,7 +73,7 @@ void CanvasWidget::setSlices(int slices) {
         _gridDrawer.setSlices(0);
     }
     _gridDrawer.setSlices(slices);
-    _undoStack->push(new SliceCommand(&_mandalaModel,slices));
+    _undoStack->push(new SliceCommand(&_mandalaModel, slices));
     _gridDrawer.setSlices(_mandalaModel.getSlices());
     repaintMandala();
     update();
@@ -111,7 +110,7 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
         (height() - _canvasHeight) / 2,
         _canvasWidth,
         _canvasHeight
-        );
+    );
 
     if (!_mouseController.isDrawing()) { return; }
     if (!canvasRect.contains(event->pos())) { return; }
@@ -139,7 +138,7 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (!_currentStrokeSegments.empty()) {
         _mandalaModel.removeLastSegments(_currentStrokeSegments.size());
 
-        DrawCommand* cmd = new DrawCommand(&_mandalaModel, _currentStrokeSegments);
+        DrawCommand *cmd = new DrawCommand(&_mandalaModel, _currentStrokeSegments);
         _undoStack->push(cmd);
 
         _currentStrokeSegments.clear();
@@ -156,13 +155,13 @@ void CanvasWidget::repaintMandala() {
         (height() - _canvasHeight) / 2,
         _canvasWidth,
         _canvasHeight
-        );
+    );
     const QPoint center(canvasRect.center());
 
     const auto strokes = _mandalaModel.getStrokes();
 
     for (const auto &stroke: strokes) {
-        auto mandalaLines = _mandalaModel.generateMandalaLines(toPoint(stroke.p1),toPoint(stroke.p2),toPoint(center));
+        auto mandalaLines = _mandalaModel.generateMandalaLines(toPoint(stroke.p1), toPoint(stroke.p2), toPoint(center));
 
         for (const auto &line: mandalaLines) {
             Stroke s;
