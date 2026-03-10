@@ -171,6 +171,9 @@ void CanvasWidget::saveToFile(const QString &filePath) {
         }
     }
     const bool fileSaved = pixmap.save(fileName);
+    if (!fileSaved) {
+        qDebug() << "Error: Could not save the file.";
+    }
 }
 
 void CanvasWidget::repaintMandala() {
