@@ -87,6 +87,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_ui->actionSave_As, &QAction::triggered, this, [this]() {
         _canvas->saveToFile(QDir::homePath());
     });
+    connect(_ui->actionQuit, &QAction::triggered, this, [this]() {
+        close();
+    });
 }
 
 
