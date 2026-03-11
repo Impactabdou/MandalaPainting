@@ -2,46 +2,45 @@
 #include <cmath>
 #include <algorithm>
 
-MandalaModel::MandalaModel() : _slices(0), _mirrorEffect(false),_max(0) {
+MandalaModel::MandalaModel() : _slices(0), _mirrorEffect(false), _max(0) {
 }
 
 void MandalaModel::draw(const QPoint lastpos,
                         const QPoint currentpos,
-                        const QColor& color,
-                        int width){
-    _strokes.push_back({lastpos, currentpos, color, width});
+                        const QColor &color,
+                        const int width) {
+    _strokes.append({lastpos, currentpos, color, width});
     _max = _strokes.size() - 1;
 }
 
-void MandalaModel::clear(){
+void MandalaModel::clear() {
     _strokes.clear();
-    _max = 0;
+    _max = -1;
 }
 
-void MandalaModel::addStrokeSegments(const std::vector<Stroke>& segments){
-    _strokes.insert(_strokes.end(), segments.begin(), segments.end());
+void MandalaModel::addStrokeSegments(const QVector<Stroke> &segments) {
+    _strokes.append(segments);
     _max = _strokes.size() - 1;
 }
 
-void MandalaModel::removeLastSegments(int count) {
-    if (count <= (int)_strokes.size()) {
+void MandalaModel::removeLastSegments(const int count) {
+    if (count <= _strokes.size()) {
         _strokes.resize(_strokes.size() - count);
         _max = _strokes.size() - 1;
     }
 }
 
-std::vector<Stroke> MandalaModel::getStrokes(){
-    int endIndex = std::min(_max + 1, (int)_strokes.size());
-    return std::vector<Stroke>(_strokes.begin(), _strokes.begin() + endIndex);
+QVector<Stroke> MandalaModel::getStrokes() const {
+    const int endIndex = std::min(_max + 1, static_cast<int>(_strokes.size()));
+    return _strokes.mid(0, endIndex);
 }
 
-
-std::vector<std::pair<Point, Point> > MandalaModel::generateMandalaLines(
-    const Point &p1,
-    const Point &p2,
-    const Point &center
-) {
-    std::vector<std::pair<Point, Point> > lines;
+QVector<QPair<QPointF, QPointF> > MandalaModel::generateMandalaLines(
+    const QPointF &p1,
+    const QPointF &p2,
+    const QPointF &center
+) const {
+    QVector<QPair<QPointF, QPointF> > lines;
 
     if (_slices <= 0) {
         return lines;
@@ -49,33 +48,33 @@ std::vector<std::pair<Point, Point> > MandalaModel::generateMandalaLines(
 
     const double angleStep = 2 * M_PI / _slices;
 
-    const Point translatedP1 = translationToCenter(p1, center);
-    const Point translatedP2 = translationToCenter(p2, center);
+    const QPointF translatedP1 = translationToCenter(p1, center);
+    const QPointF translatedP2 = translationToCenter(p2, center);
 
     for (int i = 0; i < _slices; i++) {
         const double angle = i * angleStep;
 
-        Point rotatedP1 = rotatePoint(translatedP1, angle);
-        Point rotatedP2 = rotatePoint(translatedP2, angle);
+        QPointF rotatedP1 = rotatePoint(translatedP1, angle);
+        QPointF rotatedP2 = rotatePoint(translatedP2, angle);
 
 
-        Point inversedTranslatedP1 = translationFromCenter(rotatedP1, center);
-        Point inversedTranslatedP2 = translationFromCenter(rotatedP2, center);
-        lines.emplace_back(inversedTranslatedP1, inversedTranslatedP2);
+        QPointF inversedTranslatedP1 = translationFromCenter(rotatedP1, center);
+        QPointF inversedTranslatedP2 = translationFromCenter(rotatedP2, center);
+        lines.append({inversedTranslatedP1, inversedTranslatedP2});
 
         if (_mirrorEffect) {
-            Point mirrorP1 = translationFromCenter(-rotatedP1, center);
-            Point mirrorP2 = translationFromCenter(-rotatedP2, center);
-            lines.emplace_back(mirrorP1, mirrorP2);
+            QPointF mirrorP1 = translationFromCenter(QPointF(-rotatedP1.x(), rotatedP1.y()), center);
+            QPointF mirrorP2 = translationFromCenter(QPointF(-rotatedP2.x(), rotatedP2.y()), center);
+            lines.append({mirrorP1, mirrorP2});
         }
     }
     return lines;
 }
 
-Point MandalaModel::rotatePoint(const Point &p, const double angle) {
+QPointF MandalaModel::rotatePoint(const QPointF &p, const double angle) {
     const double cosAngle = std::cos(angle);
     const double sinAngle = std::sin(angle);
-    const double x = p.x * cosAngle - p.y * sinAngle;
-    const double y = p.x * sinAngle + p.y * cosAngle;
+    const double x = p.x() * cosAngle - p.y() * sinAngle;
+    const double y = p.x() * sinAngle + p.y() * cosAngle;
     return {x, y};
 }

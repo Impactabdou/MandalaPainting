@@ -1,10 +1,12 @@
-#pragma once
+#ifndef CANVASWIDGET_H
+#define CANVASWIDGET_H
 #include <QWidget>
 #include "GridDrawer.h"
 #include "MouseController.h"
 #include  "model/MandalaModel.h"
 #include <QUndoStack>
 #include "model/Stroke.h"
+#include <QVector>
 
 class CanvasWidget : public QWidget {
     Q_OBJECT
@@ -32,7 +34,7 @@ public:
 
     void setPenColor(const QColor &color) { _currColor = color; };
 
-    int getSlices() const { return _mandalaModel.getSlices(); }
+    [[nodiscard]] int getSlices() const { return _mandalaModel.getSlices(); }
 
     void saveToFile(const QString &filePath);
 
@@ -51,15 +53,13 @@ private:
     int _canvasWidth;
     MouseController _mouseController;
     MandalaModel _mandalaModel;
-    std::vector<Stroke> _paintedStrokes;
+    QVector<Stroke> _paintedStrokes;
     int _penWidth;
     QUndoStack *_undoStack;
-    std::vector<Stroke> _currentStrokeSegments;
+    QVector<Stroke> _currentStrokeSegments;
     QColor _currColor = Qt::black;
 
-    static Point toPoint(const QPoint &point) {
-        return {static_cast<double>(point.x()), static_cast<double>(point.y())};
-    }
 
     void repaintMandala();
 };
+#endif

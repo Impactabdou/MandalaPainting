@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QPixmap colorSquare(16, 16);
 
-    QColor chosenColor = Qt::black;
+    const QColor chosenColor = Qt::black;
 
     colorSquare.fill(chosenColor);
 

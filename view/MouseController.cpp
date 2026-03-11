@@ -3,7 +3,7 @@
 MouseController::MouseController() : _drawing(false) {
 }
 
-void MouseController::handlePress(QMouseEvent *event) {
+void MouseController::handlePress(const QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         _drawing = true;
         _lastPosition = event->pos();
@@ -11,13 +11,13 @@ void MouseController::handlePress(QMouseEvent *event) {
     }
 }
 
-void MouseController::handleMove(QMouseEvent *event) {
+void MouseController::handleMove(const QMouseEvent *event) {
     if (_drawing) {
         _currentPosition = event->pos();
     }
 }
 
-void MouseController::handleRelease(QMouseEvent *event) {
+void MouseController::handleRelease(const QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         _drawing = false;
     }

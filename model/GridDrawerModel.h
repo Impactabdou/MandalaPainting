@@ -1,11 +1,21 @@
-#pragma once
-#include <vector>
+#ifndef GRIDDRAWERMODEL_H
+#define GRIDDRAWERMODEL_H
+#include <QPointF>
+#include <QObject>
 
-class GridDrawerModel {
+
+class GridDrawerModel : public QObject {
+    Q_OBJECT
+
 public:
-    ~GridDrawerModel() = default;
+    ~GridDrawerModel() override = default;
 
-    static void computeGridPositions(std::vector<std::pair<double, double> > &coordinates, double diagonal, int centerX,
+    explicit GridDrawerModel(QObject *parent = nullptr) : QObject(parent) {
+    }
+
+    static void computeGridPositions(QVector<QPointF> &coordinates, double diagonal, int centerX,
                                      int centerY,
                                      int slices);
 };
+
+#endif // GRIDDRAWERMODEL_H

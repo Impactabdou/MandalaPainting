@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 #include "ui_MandalaPainting.h"
 #include "CanvasWidget.h"
 
@@ -19,3 +19,4 @@ private:
     Ui::MainWindow *_ui;
     CanvasWidget *_canvas;
 };
+#endif

@@ -1,10 +1,9 @@
 #include "GridDrawer.h"
-#include <vector>
 #include <QDebug>
 
 #include "model/GridDrawerModel.h"
 
-GridDrawer::GridDrawer(const int slices) : _numberOfSlices(slices) {
+GridDrawer::GridDrawer(const int slices, QObject *parent) : QObject(parent), _numberOfSlices(slices) {
 }
 
 void GridDrawer::drawGrid(QPainter &painter, const QRect &area) const {
@@ -18,23 +17,20 @@ void GridDrawer::drawGrid(QPainter &painter, const QRect &area) const {
     pen.setWidth(4);
     painter.setPen(pen);
 
-
-    std::vector<std::pair<double, double> > coordinates;
-    double diagonal = area.width() * area.width() + area.height() * area.height();
+    const QPoint center = area.center();
+    QVector<QPointF> coordinates;
+    const double diagonal = area.width() * area.width() + area.height() * area.height();
     GridDrawerModel::computeGridPositions(
         coordinates,
         diagonal,
-        area.center().x(),
-        area.center().y(),
+        center.x(),
+        center.y(),
         _numberOfSlices
     );
 
     for (const auto &coordinate: coordinates) {
         painter.drawLine(
-            area.center().x(),
-            area.center().y(),
-            static_cast<int>(coordinate.first),
-            static_cast<int>(coordinate.second)
+            center, coordinate.toPoint()
         );
     }
 }
