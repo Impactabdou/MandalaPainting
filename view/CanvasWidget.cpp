@@ -31,7 +31,7 @@ CanvasWidget::CanvasWidget(QWidget *parent)
 void CanvasWidget::paintEvent(QPaintEvent *) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    QRect canvasRect(
+    const QRect canvasRect(
         (width() - _canvasWidth) / 2,
         (height() - _canvasHeight) / 2,
         _canvasWidth,
@@ -63,13 +63,13 @@ void CanvasWidget::paintEvent(QPaintEvent *) {
     painter.restore();
 }
 
-void CanvasWidget::setCanvasSize(int width, int height) {
+void CanvasWidget::setCanvasSize(const int width, const int height) {
     _canvasWidth = width;
     _canvasHeight = height;
     update();
 }
 
-void CanvasWidget::setSlices(int slices) {
+void CanvasWidget::setSlices(const int slices) {
     if (slices < 2) {
         _gridDrawer.setSlices(0);
     }
@@ -80,7 +80,7 @@ void CanvasWidget::setSlices(int slices) {
     update();
 }
 
-void CanvasWidget::setGridOpacity(int width) {
+void CanvasWidget::setGridOpacity(const int width) {
     _gridDrawer.setGridOpacity(width);
     update();
 }
@@ -106,7 +106,7 @@ void CanvasWidget::mousePressEvent(QMouseEvent *event) {
 void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     _mouseController.handleMove(event);
 
-    QRect canvasRect(
+    const QRect canvasRect(
         (width() - _canvasWidth) / 2,
         (height() - _canvasHeight) / 2,
         _canvasWidth,
@@ -116,8 +116,8 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     if (!_mouseController.isDrawing()) { return; }
     if (!canvasRect.contains(event->pos())) { return; }
 
-    QPoint lastpos = _mouseController.getLastPosition();
-    QPoint currentpos = _mouseController.getCurrentPosition();
+    const QPoint lastpos = _mouseController.getLastPosition();
+    const QPoint currentpos = _mouseController.getCurrentPosition();
 
     Stroke segment;
     segment.p1 = lastpos;
@@ -178,7 +178,7 @@ void CanvasWidget::saveToFile(const QString &filePath) {
 
 void CanvasWidget::repaintMandala() {
     _paintedStrokes.clear();
-    QRect canvasRect(
+    const QRect canvasRect(
         (width() - _canvasWidth) / 2,
         (height() - _canvasHeight) / 2,
         _canvasWidth,
@@ -189,12 +189,12 @@ void CanvasWidget::repaintMandala() {
     const auto strokes = _mandalaModel.getStrokes();
 
     for (const auto &stroke: strokes) {
-        auto mandalaLines = _mandalaModel.generateMandalaLines(toPoint(stroke.p1), toPoint(stroke.p2), toPoint(center));
+        auto mandalaLines = _mandalaModel.generateMandalaLines(stroke.p1, stroke.p2, center);
 
         for (const auto &line: mandalaLines) {
             Stroke s;
-            s.p1 = QPoint(static_cast<int>(line.first.x), static_cast<int>(line.first.y));
-            s.p2 = QPoint(static_cast<int>(line.second.x), static_cast<int>(line.second.y));
+            s.p1 = QPointF(line.first.x(), line.first.y());
+            s.p2 = QPointF(line.second.x(), line.second.y());
             s.color = stroke.color;
             s.width = stroke.width;
 

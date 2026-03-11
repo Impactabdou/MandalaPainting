@@ -1,53 +1,52 @@
 #ifndef  MANDALAMODEL_H
 #define MANDALAMODEL_H
-#include <vector>
-#include "Point.h"
-#include "qpoint.h"
 #include "Stroke.h"
-class MandalaModel {
+#include <QVector>
+#include <QPointF>
+#include <QPair>
+#include <QObject>
+
+class MandalaModel : public QObject {
+    Q_OBJECT
+
 public:
     MandalaModel();
 
-    void setSlices(int slices) { _slices = slices; }
+    void setSlices(const int slices) { _slices = slices; }
 
-    std::vector<std::pair<Point, Point> > generateMandalaLines(const Point &p1, const Point &p2,
-                                                               const Point &center);
+    [[nodiscard]] QVector<QPair<QPointF, QPointF> > generateMandalaLines(const QPointF &p1, const QPointF &p2,
+                                                                         const QPointF &center) const;
 
     void setMirrorEffect(const bool mirrorEffectActived) { _mirrorEffect = mirrorEffectActived; }
 
-    void draw(const QPoint lastpos,const QPoint currentpos,const QColor& color,int width);
+    void draw(QPoint lastpos, QPoint currentpos, const QColor &color, int width);
 
-    void undo();
-
-    void redo();
-
-    void addStrokeSegments(const std::vector<Stroke>& segments);
+    void addStrokeSegments(const QVector<Stroke> &segments);
 
     void removeLastSegments(int count);
+
     void clear();
 
-    std::vector<Stroke> getStrokes();
+    [[nodiscard]] QVector<Stroke> getStrokes() const;
 
-    int getSlices() const { return _slices; }
-
+    [[nodiscard]] int getSlices() const { return _slices; }
 
 private:
     int _slices;
     bool _mirrorEffect;
-    std::vector<Stroke> _strokes;
+    QVector<Stroke> _strokes;
     int _max;
 
 
-
-    static Point translationToCenter(const Point &p, const Point &center) {
-        return {p.x - center.x, p.y - center.y};
+    static QPointF translationToCenter(const QPointF &p, const QPointF &center) {
+        return {p.x() - center.x(), p.y() - center.y()};
     }
 
-    static Point translationFromCenter(const Point &p, const Point &center) {
-        return {p.x + center.x, p.y + center.y};
+    static QPointF translationFromCenter(const QPointF &p, const QPointF &center) {
+        return {p.x() + center.x(), p.y() + center.y()};
     }
 
-    static Point rotatePoint(const Point &p, double angle);
+    static QPointF rotatePoint(const QPointF &p, double angle);
 };
 
 #endif

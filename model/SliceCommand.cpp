@@ -1,6 +1,6 @@
 #include "SliceCommand.h"
 
-SliceCommand::SliceCommand(MandalaModel* model,int newSlices,QUndoCommand* parent)
+SliceCommand::SliceCommand(MandalaModel* model, const int newSlices,QUndoCommand* parent)
     : QUndoCommand(parent), _model(model),_newSlices(newSlices) {
     setText("Change Slices");
     _oldSlices = _model->getSlices();
