@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GRIDDRAWERMODEL_H
+#define GRIDDRAWERMODEL_H
 #include <vector>
 
 class GridDrawerModel {
@@ -9,3 +10,5 @@ public:
                                      int centerY,
                                      int slices);
 };
+
+#endif // GRIDDRAWERMODEL_H

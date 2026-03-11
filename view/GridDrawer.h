@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GRIDDRAWER_H
+#define GRIDDRAWER_H
 #include <QPainter>
 #include <QRect>
 
@@ -16,3 +17,4 @@ private:
     int _numberOfSlices;
     int _gridOpacity = 90;
 };
+#endif

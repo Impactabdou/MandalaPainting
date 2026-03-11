@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CANVASWIDGET_H
+#define CANVASWIDGET_H
 #include <QWidget>
 #include "GridDrawer.h"
 #include "MouseController.h"
@@ -63,3 +64,4 @@ private:
 
     void repaintMandala();
 };
+#endif

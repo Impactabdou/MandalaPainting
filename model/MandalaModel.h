@@ -1,7 +1,7 @@
-#pragma once
+#ifndef  MANDALAMODEL_H
+#define MANDALAMODEL_H
 #include <vector>
 #include "Point.h"
-#include "QList"
 #include "qpoint.h"
 #include "Stroke.h"
 class MandalaModel {
@@ -49,3 +49,5 @@ private:
 
     static Point rotatePoint(const Point &p, double angle);
 };
+
+#endif

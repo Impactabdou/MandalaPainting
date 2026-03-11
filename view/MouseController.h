@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MOUSECONTROLLER_H
+#define MOUSECONTROLLER_H
 #include <QPoint>
 #include <QMouseEvent>
 
@@ -25,3 +26,4 @@ private:
     QPoint _lastPosition;
     bool _drawing;
 };
+#endif
