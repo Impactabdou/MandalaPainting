@@ -22,4 +22,11 @@ jobs:
         run: qmake
 
       - name: Build
-        run: make -j$(nproc)
+        run:
+          qmake 
+          |
+          make -j$(nproc)
+
+      - name: Clean
+        run: make clean
+        
