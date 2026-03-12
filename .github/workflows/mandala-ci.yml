@@ -2,6 +2,7 @@ name: Mandala CI
 
 on:
   pull_request:
+    branches: [ main ]
 
 jobs:
   build:
