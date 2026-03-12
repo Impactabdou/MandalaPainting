@@ -92,6 +92,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_ui->actionQuit, &QAction::triggered, this, [this]() {
         close();
     });
+    connect(_ui->btnPalette, &QPushButton::toggled, this, [this]() {
+         _canvas->set_colorful();
+    });
 }
 
 
