@@ -1,0 +1,7 @@
+LICENSE export-ignore
+README.md export-ignore
+docs/ export-ignore
+tests/ export-ignore
+.github/ export-ignore
+.gitignore export-ignore
+README.md
