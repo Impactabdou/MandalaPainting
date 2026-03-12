@@ -123,8 +123,8 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     segment.p1 = lastpos;
     segment.p2 = currentpos;
     segment.width = _penWidth;
+    segment.color = _currColor;
     _currentStrokeSegments.push_back(segment);
-
     _mandalaModel.draw(lastpos, currentpos, _currColor, _penWidth);
     _mouseController.setLastPosition(currentpos);
     repaintMandala();
