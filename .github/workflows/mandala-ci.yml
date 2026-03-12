@@ -23,9 +23,4 @@ jobs:
         run: qmake
 
       - name: Build
-        run:
-          lrelease icons/mandala_en.ts -qm icons/mandala_en.qm
-          |
-          lrelease icons/mandala_fr.ts -qm icons/mandala_fr.qm
-          |
-          make -j$(nproc)
+        run: make -j$(nproc)
