@@ -15,13 +15,13 @@ jobs:
       - name: Install Qt
         run: |
           sudo apt update
-          sudo apt install -y qtbase5-dev qtchooser qt5-qmake build-essential
+          sudo apt install -y qtbase5-dev qtchooser qt5-qmake build-essential qttools5-dev-tools
 
-      - name: config
-        run: qmake
+      - name: Generate translations
+        run: lrelease *.ts
 
-      - name: build
+      - name: Configure
+        run: qmake CONFIG+=release
+
+      - name: Build
         run: make -j$(nproc)
-
-      - name: clean
-        run: make clean distclean
