@@ -148,7 +148,6 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 
-
 void CanvasWidget::saveToFile(const QString &filePath) {
     const QPixmap pixmap = this->grab();
     QString extension;
@@ -183,7 +182,7 @@ void CanvasWidget::repaintMandala() {
         (height() - _canvasHeight) / 2,
         _canvasWidth,
         _canvasHeight
-        );
+    );
     const QPoint center(canvasRect.center());
 
     auto strokes = _mandalaModel.getStrokes();
@@ -200,7 +199,7 @@ void CanvasWidget::repaintMandala() {
             s.p2 = QPointF(line.second.x(), line.second.y());
             s.width = stroke.width;
 
-            if(_is_colorful && numLines > 0) {
+            if (_is_colorful && numLines > 0) {
                 int baseHue = stroke.color.hue();
                 if (baseHue == -1) { baseHue = 0; }
 

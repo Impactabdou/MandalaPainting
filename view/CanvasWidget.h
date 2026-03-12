@@ -64,6 +64,7 @@ private:
     bool _is_colorful = false;
 
 
+
     void repaintMandala();
 };
 #endif
