@@ -297,7 +297,7 @@
         <action name="actionSave_As">
             <property name="icon">
                 <iconset resource="../icons/icons.qrc">
-                    <normaloff>:/document-open.png</normaloff>:/document-open.png
+                    <normaloff>:/document-save.png</normaloff>:/document-open.png
                 </iconset>
             </property>
             <property name="text">
