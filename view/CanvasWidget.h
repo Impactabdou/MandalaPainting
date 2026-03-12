@@ -38,6 +38,8 @@ public:
 
     void saveToFile(const QString &filePath);
 
+    void set_colorful() {_is_colorful = !_is_colorful;};
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
@@ -46,6 +48,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
 
     void mouseReleaseEvent(QMouseEvent *event) override;
+
 
 private:
     GridDrawer _gridDrawer;
@@ -58,8 +61,10 @@ private:
     QUndoStack *_undoStack;
     QVector<Stroke> _currentStrokeSegments;
     QColor _currColor = Qt::black;
+    bool _is_colorful = false;
 
 
     void repaintMandala();
+    QColor get_next_color();
 };
 #endif

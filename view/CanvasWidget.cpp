@@ -122,15 +122,24 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     Stroke segment;
     segment.p1 = lastpos;
     segment.p2 = currentpos;
+    if(_is_colorful){
+        _currColor = get_next_color();
+    }
     segment.color = _currColor;
     segment.width = _penWidth;
-
     _currentStrokeSegments.push_back(segment);
 
     _mandalaModel.draw(lastpos, currentpos, _currColor, _penWidth);
     _mouseController.setLastPosition(currentpos);
     repaintMandala();
     update();
+}
+
+QColor CanvasWidget::get_next_color(){
+    const int hueStep = 5;
+    const int currHue = (_currColor.hue() + hueStep) % 360;
+
+    return QColor::fromHsv(currHue, 255, 255);
 }
 
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *event) {
@@ -148,6 +157,8 @@ void CanvasWidget::mouseReleaseEvent(QMouseEvent *event) {
         update();
     }
 }
+
+
 
 void CanvasWidget::saveToFile(const QString &filePath) {
     const QPixmap pixmap = this->grab();
