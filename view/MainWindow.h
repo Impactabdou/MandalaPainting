@@ -14,6 +14,7 @@ private slots:
     void on_colorSelectBtn_clicked();
     void on_undo() const;
     void on_redo() const;
+    void on_about() ;
 
 private:
     Ui::MainWindow *_ui;

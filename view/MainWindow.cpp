@@ -4,6 +4,7 @@
 #include "view/linepreview.h"
 #include <QDebug>
 #include <QDir>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), _ui(new Ui::MainWindow) {
@@ -84,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(_ui->actionUndo, &QAction::triggered, this, &MainWindow::on_undo);
     connect(_ui->actionRedo, &QAction::triggered, this, &MainWindow::on_redo);
+    connect(_ui->actionAbout, &QAction::triggered, this, &MainWindow::on_about);
     connect(_ui->actionSave_As, &QAction::triggered, this, [this]() {
         _canvas->saveToFile(QDir::homePath());
     });
@@ -121,4 +123,18 @@ void MainWindow::on_colorSelectBtn_clicked() {
         _canvas->setPenColor(chosenColor);
         _ui->lineWidthPreview->setPenColor(chosenColor);
     }
+}
+
+void MainWindow::on_about(){
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle("About Ensi-Mandala");
+
+    msgBox.setText("Ensi-Mandala: An interactive tool for drawing Mandalas.<br><br> Abderrahmene KABAR - Mohamed ABDESSALAME <br><br> (C) 2026 ");
+
+    QPixmap logo("://ENSICAEN.png");
+    msgBox.setIconPixmap(logo.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    msgBox.setStandardButtons(QMessageBox::Ok);
+
+    msgBox.exec();
 }
