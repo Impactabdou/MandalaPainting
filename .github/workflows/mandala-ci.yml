@@ -17,11 +17,15 @@ jobs:
           sudo apt update
           sudo apt install -y qtbase5-dev qtchooser qt5-qmake build-essential qttools5-dev-tools
 
-      - name: Generate translations
-        run: lrelease *.ts
+
 
       - name: Configure
-        run: qmake CONFIG+=release
+        run: qmake
 
       - name: Build
-        run: make -j$(nproc)
+        run:
+          lrelease icons/mandala_en.ts -qm icons/mandala_en.qm
+          |
+          lrelease icons/mandala_fr.ts -qm icons/mandala_fr.qm
+          |
+          make -j$(nproc)
