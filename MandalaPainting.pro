@@ -31,3 +31,9 @@ SOURCES += main.cpp \
            view/linepreview.cpp \
            model/SliceCommand.cpp
 RESOURCES += icons/icons.qrc
+TRANSLATIONS += mandala_en.ts \
+                mandala_fr.ts
+
+DISTFILES += \
+    mandala_en.qm \
+    mandala_fr.qm

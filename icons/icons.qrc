@@ -10,5 +10,9 @@
         <file>document-new.png</file>
         <file>default_pencil.png</file>
         <file>ENSICAEN.png</file>
+        <file>mandala_fr.ts</file>
+        <file>mandala_fr.qm</file>
+        <file>mandala_en.ts</file>
+        <file>mandala_en.qm</file>
     </qresource>
 </RCC>

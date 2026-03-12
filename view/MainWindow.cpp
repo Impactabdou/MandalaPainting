@@ -115,7 +115,7 @@ void MainWindow::on_redo() const {
 
 
 void MainWindow::on_colorSelectBtn_clicked() {
-    QColor chosenColor = QColorDialog::getColor(Qt::white, this, "Choose Color");
+    QColor chosenColor = QColorDialog::getColor(Qt::white, this, tr("Choose Color"));
 
     if (chosenColor.isValid()) {
         QPixmap colorSquare(16, 16);
@@ -130,9 +130,9 @@ void MainWindow::on_colorSelectBtn_clicked() {
 
 void MainWindow::on_about(){
     QMessageBox msgBox(this);
-    msgBox.setWindowTitle("About Ensi-Mandala");
+    msgBox.setWindowTitle(tr("About Ensi-Mandala"));
 
-    msgBox.setText("Ensi-Mandala: An interactive tool for drawing Mandalas.<br><br> Abderrahmene KABAR - Mohamed ABDESSALAME <br><br> (C) 2026 ");
+    msgBox.setText(tr("Ensi-Mandala: An interactive tool for drawing Mandalas.<br><br> Abderrahmene KABAR - Mohamed ABDESSALAME <br><br> (C) 2026 "));
 
     QPixmap logo("://ENSICAEN.png");
     msgBox.setIconPixmap(logo.scaled(150, 150, Qt::KeepAspectRatio, Qt::SmoothTransformation));
