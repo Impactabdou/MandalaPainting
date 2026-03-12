@@ -5,3 +5,4 @@ tests/ export-ignore
 .github/ export-ignore
 .gitignore export-ignore
 build/ export-ignore
+.gitattributes export-ignore
