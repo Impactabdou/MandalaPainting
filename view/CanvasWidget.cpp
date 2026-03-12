@@ -122,10 +122,6 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     Stroke segment;
     segment.p1 = lastpos;
     segment.p2 = currentpos;
-    if(_is_colorful){
-        _currColor = get_next_color();
-    }
-    segment.color = _currColor;
     segment.width = _penWidth;
     _currentStrokeSegments.push_back(segment);
 
@@ -133,13 +129,6 @@ void CanvasWidget::mouseMoveEvent(QMouseEvent *event) {
     _mouseController.setLastPosition(currentpos);
     repaintMandala();
     update();
-}
-
-QColor CanvasWidget::get_next_color(){
-    const int hueStep = 5;
-    const int currHue = (_currColor.hue() + hueStep) % 360;
-
-    return QColor::fromHsv(currHue, 255, 255);
 }
 
 void CanvasWidget::mouseReleaseEvent(QMouseEvent *event) {
@@ -194,22 +183,37 @@ void CanvasWidget::repaintMandala() {
         (height() - _canvasHeight) / 2,
         _canvasWidth,
         _canvasHeight
-    );
+        );
     const QPoint center(canvasRect.center());
 
-    const auto strokes = _mandalaModel.getStrokes();
+    auto strokes = _mandalaModel.getStrokes();
 
     for (const auto &stroke: strokes) {
         auto mandalaLines = _mandalaModel.generateMandalaLines(stroke.p1, stroke.p2, center);
+
+        int numLines = mandalaLines.size();
+        int sliceIndex = 0;
 
         for (const auto &line: mandalaLines) {
             Stroke s;
             s.p1 = QPointF(line.first.x(), line.first.y());
             s.p2 = QPointF(line.second.x(), line.second.y());
-            s.color = stroke.color;
             s.width = stroke.width;
 
+            if(_is_colorful && numLines > 0) {
+                int baseHue = stroke.color.hue();
+                if (baseHue == -1) { baseHue = 0; }
+
+                int hueStep = 360 / numLines;
+                int currentHue = (baseHue + (sliceIndex * hueStep)) % 360;
+
+                s.color = QColor::fromHsv(currentHue, 255, 255);
+            } else {
+                s.color = stroke.color;
+            }
+
             _paintedStrokes.push_back(s);
+            sliceIndex++;
         }
     }
 }

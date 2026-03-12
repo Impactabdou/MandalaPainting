@@ -65,6 +65,5 @@ private:
 
 
     void repaintMandala();
-    QColor get_next_color();
 };
 #endif
