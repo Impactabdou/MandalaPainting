@@ -1,3 +1,2 @@
 # MandalaPainting
-
-[![Build Status](https://github.com/Impactabdou/MandalaPainting/actions/workflows/mandala-ci.yml/badge.svg)](https://github.com/Impactabdou/MandalaPainting/actions)
+[![Build Status](https://github.com/Impactabdou/MandalaPainting/actions/workflows/mandala-ci.yml/badge.svg?branch=main)](https://github.com/Impactabdou/MandalaPainting/actions/workflows/mandala-ci.yml)
