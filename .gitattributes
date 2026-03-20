@@ -1,8 +1,8 @@
 LICENSE export-ignore
 README.md export-ignore
-doc/ export-ignore
 tests/ export-ignore
 .github/ export-ignore
 .gitignore export-ignore
 build/ export-ignore
 .gitattributes export-ignore
+.git export-ignore
